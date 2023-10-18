@@ -1,20 +1,28 @@
 ﻿using magicVilla_VillaAPI.Data;
 using magicVilla_VillaAPI.Models;
 using magicVilla_VillaAPI.Models.Dto;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.JsonPatch;
+using magicVilla_VillaAPI.Logging;
 
 namespace magicVilla_VillaAPI.Controllers
 {
     [Route("api/VillaAPI")]
     [ApiController]
+
+    
     public class ValuesController : ControllerBase
-    {
+    {     
+        private readonly ILogging _logger;
+        public ValuesController(ILogging logger)
+        {
+            _logger = logger;
+        }
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public ActionResult<IEnumerable<VillaDTO>> GetVillas()
         {
+            _logger.Log("Getting all villas","");
             return Ok(VillaStore.villaList);
 
         }
@@ -30,6 +38,8 @@ namespace magicVilla_VillaAPI.Controllers
 
             if (id == 0)
             {
+                _logger.Log("Get Villa Error with id" + id,"Error");
+
                 return BadRequest();
             }
 
@@ -108,17 +118,28 @@ namespace magicVilla_VillaAPI.Controllers
             return NoContent();
         }
 
-        [HttpPut("{id:int}", Name = "UpdatePartialVilla")]
+        [HttpPatch("{id:int}", Name = "UpdatePartialVilla")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult UpdatePartialVilla(int id,JsonPatchDocument1)
+        public IActionResult UpdatePartialVilla(int id, JsonPatchDocument<VillaDTO> patchDTO)    
         {
+            if(patchDTO==null||id==0)
+            { 
+                return BadRequest(); 
+            }
+            var villa = VillaStore.villaList.FirstOrDefault(u => u.Id == id);
+            if (villa == null)
+            {
+                return BadRequest();     
+            }
 
+            patchDTO.ApplyTo(villa, ModelState);
+            if (!ModelState.IsValid) 
+            {
+                return BadRequest(ModelState);
 
-
-
-
-
+            }
+            return NoContent();
         }
     }
 }
