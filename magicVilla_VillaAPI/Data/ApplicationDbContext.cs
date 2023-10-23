@@ -11,6 +11,7 @@ namespace magicVilla_VillaAPI.Data
             
         }
         public DbSet<Villa> Villas { get; set; }
+        public DbSet<VillaNumber> VillaNumber { get; set; }  
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Villa>().HasData(
@@ -50,7 +51,7 @@ namespace magicVilla_VillaAPI.Data
                       Rate = 9990,
                       Sqft = 709,
                       Amenity="",
-                      CreatedDate = DateTime.Now
+
                   });
         }
     }
