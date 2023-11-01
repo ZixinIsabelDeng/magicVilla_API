@@ -1,0 +1,60 @@
+﻿<!-- Declare the data model for this view. It expects a list of VillaDTO objects. -->
+@model IEnumerable<magicVilla_Web.Models.Dto.VillaNumberDTO>
+
+<!-- Add some space at the top -->
+<br />
+
+<!-- Create a container div with padding and a border -->
+<div class="container p-4 border">
+
+    <!-- Create a row for the header -->
+    <div class="row pb-2">
+
+        <!-- Create a column for the title -->
+        <div class="col">
+            <!-- Display the title "Villa List" -->
+            <h1 class="text-primary">Villa Number List</h1>
+        </div>
+
+        <!-- Create another column for the "create new villa" button -->
+        <div class="col text-end pt-1">
+            <!-- Create a button to add a new villa -->
+            <a asp-controller="VillaNumber" asp-action="CreateVillaNumber" class="btn btn-outline-primary"><i class="bi bi-plus-square"></i> Create New Villa Number</a>
+        </div>
+    </div>
+    <!-- Create a table to display the villas -->
+    <table class="table">
+
+        <!-- Create the table header -->
+        <thead>
+            <tr>
+                <th>Villa Name</th>
+                <th>Villa Number</th>
+                <th></th>
+            </tr>
+        </thead>
+
+        <!-- Create the table body -->
+        <tbody>
+            <!-- Loop through each item in the Model to populate the table -->
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <!-- Display the name of the villa -->
+                    <td>@item.Villa.Name</td>
+
+                    <!-- Display the occupancy of the villa -->
+                    <td>@item.VillaNo</td>
+
+               
+
+                    <!-- Empty column, possibly for future actions like edit or delete -->
+                    <td>
+                        <a asp-controller="VillaNumber" asp-action="UpdateVillaNumber" asp-route-villaNo="@item.VillaNo" class="btn btn-success"><i class="bi bi-pencil-square"></i></a>
+                        <a asp-controller="VillaNumber" asp-action="DeleteVillaNumber" asp-route-villaNo="@item.VillaNo" class="btn btn-danger"><i class="bi bi-trash-fill"></i></a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

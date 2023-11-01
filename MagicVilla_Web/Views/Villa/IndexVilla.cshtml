@@ -1,0 +1,68 @@
+﻿<!-- Declare the data model for this view. It expects a list of VillaDTO objects. -->
+@model IEnumerable<magicVilla_Web.Models.Dto.VillaDTO>
+
+<!-- Add some space at the top -->
+<br />
+
+<!-- Create a container div with padding and a border -->
+<div class="container p-4 border">
+
+    <!-- Create a row for the header -->
+    <div class="row pb-2">
+
+        <!-- Create a column for the title -->
+        <div class="col">
+            <!-- Display the title "Villa List" -->
+            <h1 class="text-primary">Villa List</h1>
+        </div>
+
+        <!-- Create another column for the "create new villa" button -->
+        <div class="col text-end pt-1">
+            <!-- Create a button to add a new villa --> 
+            <a asp-controller="Villa" asp-action="CreateVilla" class="btn btn-outline-primary"><i class="bi bi-plus-square"></i> create new villa</a>
+            
+        
+        
+        
+        </div>
+    </div>
+
+    <!-- Create a table to display the villas -->
+    <table class="table">
+
+        <!-- Create the table header -->
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Occupancy</th>
+                <th>Price</th>
+                <th></th>
+            </tr>
+        </thead>
+
+        <!-- Create the table body -->
+        <tbody>
+            <!-- Loop through each item in the Model to populate the table -->
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <!-- Display the name of the villa -->
+                    <td>@item.Name</td>
+
+                    <!-- Display the occupancy of the villa -->
+                    <td>@item.Occupancy</td>
+
+                    <!-- Display the rate of the villa, formatted as currency -->
+                    <td>@((item.Rate).ToString("c"))</td>
+
+                    <!-- Empty column, possibly for future actions like edit or delete -->
+                    <td>
+                        <a asp-controller="Villa" asp-action="UpdateVilla" asp-route-villaId="@item.Id" class="btn btn-danger"><i class="bi bi-pencil-square"></i></a>
+                        <a asp-controller="Villa" asp-action="DeleteVilla" asp-route-villaId="@item.Id" class="btn btn-outline-primary"><i class="bi bi-trash"></i></a>
+                       
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

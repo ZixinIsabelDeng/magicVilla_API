@@ -9,7 +9,8 @@ using AutoMapper;
 using magicVilla_VillaAPI.Repository;
 
 using System.Net;
-using System;
+
+using Microsoft.AspNetCore.Authorization;
 
 namespace magicVilla_VillaAPI.Controllers
 {
@@ -19,18 +20,20 @@ namespace magicVilla_VillaAPI.Controllers
     
     public class ValuesController : ControllerBase
     {
-        private readonly IVillaNumberRepository _dbVilla;
+        private readonly IVillaRepository _dbVilla;
         private readonly IMapper _mapper;
         protected APIResponse _response;
 
-        public ValuesController(IVillaNumberRepository dbVilla,IMapper mapper)
+        public ValuesController(IVillaRepository dbVilla,IMapper mapper)
         {
             _dbVilla = dbVilla;
             _mapper = mapper;
             this._response = new();
         }
         [HttpGet]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<ActionResult<APIResponse>> GetVillas()
         {
             try
@@ -51,8 +54,9 @@ namespace magicVilla_VillaAPI.Controllers
         }
 
 
-
+        [Authorize(Roles = "admin")]
         [HttpGet("{id:int}", Name = "GetVilla")]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -73,7 +77,7 @@ namespace magicVilla_VillaAPI.Controllers
                     _response.StatusCode = HttpStatusCode.NotFound;
                     return NotFound(_response);
                 }
-                _response.Result = _mapper.Map<List<VillaDTO>>(villa);
+                _response.Result = _mapper.Map<VillaDTO>(villa);
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);
             }
@@ -90,6 +94,7 @@ namespace magicVilla_VillaAPI.Controllers
         }
 
         [HttpPost]
+       
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -127,9 +132,13 @@ namespace magicVilla_VillaAPI.Controllers
         }
 
 
-
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpDelete("{id:int}", Name = "DeleteVilla")]
-
+        [Authorize(Roles = "CUSTOM")]
         public async Task<ActionResult<APIResponse>> DeleteVilla(int id)
         {
             try
