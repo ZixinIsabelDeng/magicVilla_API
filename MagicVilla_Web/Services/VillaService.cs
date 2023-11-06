@@ -30,60 +30,65 @@ namespace MagicVilla_Web.Services
         }
 
         // This function creates a new villa and returns the result.
-        public Task<T> CreateAsync<T>(VillaCreateDTO dto)
+        public Task<T> CreateAsync<T>(VillaCreateDTO dto, string token)
         {
             // We're sending a POST request to add new data (a new villa).
             return SendAsync<T>(new APIRequest()
             {
                 ApiType = SD.ApiType.POST,
                 Data = dto,
-                Url = villaUrl + "/api/VillaAPI"
+                Url = villaUrl + "/api/v1/VillaAPI",
+                Token = token
             });
         }
 
         // This function deletes a villa based on its ID.
-        public Task<T> DeleteAsync<T>(int id)
+        public Task<T> DeleteAsync<T>(int id, string token)
         {
             // We're sending a DELETE request to remove a villa.
             return SendAsync<T>(new APIRequest()
             {
                 ApiType = SD.ApiType.DELETE,
-                Url = villaUrl + "/api/VillaAPI/" + id
+                Url = villaUrl + "/api/v1/VillaAPI/" + id,
+                Token = token
             });
         }
 
         // This function gets all villas.
-        public Task<T> GetAllAsync<T>()
+        public Task<T> GetAllAsync<T>(string token)
         {
             
             // We're sending a GET request to fetch all villas.
             return SendAsync<T>(new APIRequest()
             {
                 ApiType = SD.ApiType.GET,
-                Url = villaUrl + "/api/VillaAPI"
+                Url = villaUrl + "/api/v1/VillaAPI",
+                Token = token
             });
         }
 
         // This function gets a specific villa based on its ID.
-        public Task<T> GetAsync<T>(int id)
+        public Task<T> GetAsync<T>(int id, string token)
         {
             // We're sending a GET request to fetch one specific villa.
             return SendAsync<T>(new APIRequest()
             {
                 ApiType = SD.ApiType.GET,
-                Url = villaUrl + "/api/VillaAPI/" + id
+                Url = villaUrl + "/api/v1/VillaAPI/" + id,
+                Token = token
             });
         }
 
         // This function updates a villa's information.
-        public Task<T> UpdateAsync<T>(VillaUpdateDTO dto)
+        public Task<T> UpdateAsync<T>(VillaUpdateDTO dto, string token)
         {
             // We're sending a PUT request to update a villa's information.
             return SendAsync<T>(new APIRequest()
             {
                 ApiType = SD.ApiType.PUT,
                 Data = dto,
-                Url = villaUrl + "/api/VillaAPI/" + dto.Id
+                Url = villaUrl + "/api/v1/VillaAPI/" + dto.Id,
+                Token = token
             });
         }
 

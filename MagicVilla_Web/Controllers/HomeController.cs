@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using MagicVilla_Utility;
 using magicVilla_Web.Models;
 using magicVilla_Web.Models.Dto;
 using MagicVilla_Web.Models;
@@ -30,7 +31,7 @@ namespace MagicVilla_Web.Controllers
             List<VillaDTO> list = new();
 
             // Call the GetAllAsync method from the villa service and await its response
-            var response = await _villaService.GetAllAsync<APIResponse>();
+            var response = await _villaService.GetAllAsync<APIResponse>(HttpContext.Session.GetString(SD.SessionToken));
             Console.WriteLine($"API Response: {response}");  // Log the response
 
             // Check if the response is successful and not null

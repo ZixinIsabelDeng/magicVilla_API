@@ -8,29 +8,39 @@ using magicVilla_VillaAPI.Repository;
 using System.Net;
 
 
-namespace magicVilla_VillaAPI.Controllers
+
+namespace magicVilla_VillaAPI.Controllers.v1
 {
-    
+
     namespace magicVilla_VillaAPI.Controllers
     {
-        [Route("api/VillaNumberAPI")]
+        [Route("api/v{version:apiVersion}/VillaNumberAPI")]
         [ApiController]
+        [ApiVersion("1.0", Deprecated = true)]
 
-
-        public class VillaNumberAPIController : ControllerBase
+        public class VillaNumberAPIV1Controller : ControllerBase
         {
             private readonly IVillaNumberRepository _dbVillaNumber;
             private readonly IMapper _mapper;
             private readonly IVillaRepository _dbVilla;
             protected APIResponse _response;
 
-            public VillaNumberAPIController(IVillaNumberRepository dbVillaNumber, IMapper mapper, IVillaRepository dbVilla)
+            public VillaNumberAPIV1Controller(IVillaNumberRepository dbVillaNumber, IMapper mapper, IVillaRepository dbVilla)
             {
                 _dbVillaNumber = dbVillaNumber;
                 _mapper = mapper;
                 this._response = new();
                 _dbVilla = dbVilla;
             }
+
+
+            [HttpGet("GetString")]
+            public IEnumerable<string> Get()
+            {
+
+                return new string[] { "String1", "String2" };
+            }
+
             [HttpGet]
             [ProducesResponseType(StatusCodes.Status200OK)]
             public async Task<ActionResult<APIResponse>> GetVillasNumbers()
@@ -50,8 +60,7 @@ namespace magicVilla_VillaAPI.Controllers
                 }
                 return _response;
             }
-
-
+            
 
             [HttpGet("{id:int}", Name = "GetVillaNumber")]
             [ProducesResponseType(StatusCodes.Status200OK)]

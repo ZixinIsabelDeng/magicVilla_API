@@ -4,6 +4,7 @@ using MagicVilla_Web.Models;
 using MagicVilla_Web.Services.IServices;
 using Newtonsoft.Json;
 using System.Diagnostics;
+using System.Net.Http.Headers;
 using System.Text;
 
 
@@ -30,8 +31,8 @@ namespace MagicVilla_Web.Services
                 HttpRequestMessage message = new HttpRequestMessage();
 
                 // Add headers to the request
-                message.Headers.Add("Accept", "application/json");             
-         //       message.Headers.Add("Content-Type", "application/json");
+                message.Headers.Add("Accept", "application/json");
+                //       message.Headers.Add("Content-Type", "application/json");
 
                 // Set the URL for the request
                 message.RequestUri = new Uri(apirequest.Url);
@@ -50,10 +51,10 @@ namespace MagicVilla_Web.Services
                         message.Method = HttpMethod.Post;
                         break;
                     case SD.ApiType.PUT:
-                        message.Method = HttpMethod.Put;  
+                        message.Method = HttpMethod.Put;
                         break;
                     case SD.ApiType.DELETE:
-                        message.Method = HttpMethod.Delete; 
+                        message.Method = HttpMethod.Delete;
                         break;
                     default:
                         message.Method = HttpMethod.Get;
@@ -61,18 +62,46 @@ namespace MagicVilla_Web.Services
                 }
 
                 // Send the HTTP request and get the response
-                 HttpResponseMessage apiResponse = null;
-                 apiResponse = await client.SendAsync(message);
+                HttpResponseMessage apiResponse = null;
+                if (!string.IsNullOrEmpty(apirequest.Token))
+                {
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", apirequest.Token);
+
+
+                }
+
+
+                apiResponse = await client.SendAsync(message);
 
                 // Read the response content as a string
                 var apiContent = await apiResponse.Content.ReadAsStringAsync();
 
-                // Deserialize the response content to an object of type T
-                var APIResponse = JsonConvert.DeserializeObject<T>(apiContent);
+                try
+                {
+                    APIResponse ApiResponse = JsonConvert.DeserializeObject<APIResponse>(apiContent);
+                    if (ApiResponse != null && (apiResponse.StatusCode == System.Net.HttpStatusCode.BadRequest
+                     || apiResponse.StatusCode == System.Net.HttpStatusCode.NotFound))
+                    {
+                        ApiResponse.StatusCode = System.Net.HttpStatusCode.BadRequest;
+                        ApiResponse.IsSuccess = false;
+                        var res = JsonConvert.SerializeObject(ApiResponse);
+                        var returnObj = JsonConvert.DeserializeObject<T>(res);
+                        return returnObj;
+                    }
 
-                // Return the deserialized ob
-                  return APIResponse;
+                }
+
+                catch (Exception e)
+                {
+                    var exceptionResponse = JsonConvert.DeserializeObject<T>(apiContent);
+                    return exceptionResponse;
+                }
+                var APIResponse = JsonConvert.DeserializeObject<T>(apiContent);
+                return APIResponse;
+
+
             }
+
             catch (Exception e)
             {
                 // Handle exceptions by creating an APIResponse object with the error message
@@ -89,7 +118,7 @@ namespace MagicVilla_Web.Services
                 // Return the error response
                 return APIResponse;
             }
+            }
         }
-
     }
-}
+

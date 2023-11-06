@@ -12,12 +12,11 @@ using System.Net;
 
 using Microsoft.AspNetCore.Authorization;
 
-namespace magicVilla_VillaAPI.Controllers
+namespace magicVilla_VillaAPI.Controllers.v1
 {
-    [Route("api/VillaAPI")]
+    [Route("api/v{version:apiVersion}/VillaAPI")]
     [ApiController]
-
-    
+    [ApiVersion("1.0")]
     public class ValuesController : ControllerBase
     {
         private readonly IVillaRepository _dbVilla;
