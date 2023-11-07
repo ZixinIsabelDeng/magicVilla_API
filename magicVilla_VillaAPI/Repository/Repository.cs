@@ -1,4 +1,4 @@
-﻿// Required namespaces for the repository
+﻿
 using magicVilla_VillaAPI.Data;
 using magicVilla_VillaAPI.Models;
 using Microsoft.EntityFrameworkCore;
@@ -49,7 +49,7 @@ namespace magicVilla_VillaAPI.Repository
             {
                 query = query.Where(filter);
             }
-
+       
             // If there are properties to include, add them to the query.
             if (includeProperties != null)
             {
@@ -64,7 +64,7 @@ namespace magicVilla_VillaAPI.Repository
         }
 
         // Asynchronous method to get a list of entities based on a filter and properties to include.
-        public async Task<List<T>> GetAllAsync(Expression<Func<T, bool>>? filter = null, string includeProperties = null)
+        public async Task<List<T>> GetAllAsync(Expression<Func<T, bool>> filter = null, string includeProperties = null, int pageSize = 0, int pageNumber = 1)
         {
             IQueryable<T> query = dbSet;  // Start with a base query over the DbSet.
 
@@ -73,6 +73,18 @@ namespace magicVilla_VillaAPI.Repository
             {
                 query = query.Where(filter);
             }
+
+            if (pageSize > 0)
+            {
+                if (pageSize > 100)
+                {
+                    pageSize = 100;
+                }
+
+                query = query.Skip(pageSize * (pageNumber - 1)).Take(pageSize);
+
+            }
+
 
             // If there are properties to include, add them to the query.
             if (includeProperties != null)
@@ -106,5 +118,7 @@ namespace magicVilla_VillaAPI.Repository
             dbSet.Update(entity);  // Update the entity in the DbSet.
             await SaveAsync();  // Asynchronously save changes to the database.
         }
+
+       
     }
 }

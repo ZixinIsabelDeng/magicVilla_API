@@ -3,13 +3,9 @@ using magicVilla_VillaAPI.Models;
 using magicVilla_VillaAPI.Models.Dto;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.JsonPatch;
-using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
 using AutoMapper;
 using magicVilla_VillaAPI.Repository;
-
 using System.Net;
-
 using Microsoft.AspNetCore.Authorization;
 
 namespace magicVilla_VillaAPI.Controllers.v1
@@ -30,14 +26,32 @@ namespace magicVilla_VillaAPI.Controllers.v1
             this._response = new();
         }
         [HttpGet]
-        [Authorize]
+        [ResponseCache(CacheProfileName ="Default30")]
+  
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult<APIResponse>> GetVillas()
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<ActionResult<APIResponse>> GetVillas([FromQuery(Name ="filterOccupancy")]int? occupancy,[FromQuery] string? search,int pageSize=0,int PageNumber=1)
         {
             try
             {
-                IEnumerable<Villa> villaList = await _dbVilla.GetAllAsync();
+                IEnumerable<Villa> villaList;
+                if (occupancy > 0)
+                {
+                    villaList= await _dbVilla.GetAllAsync(u=>u.Occupancy == occupancy,pageSize:pageSize,pageNumber:PageNumber);
+                }
+                else 
+                {
+                    villaList = await _dbVilla.GetAllAsync();
+                }
+                if (!string.IsNullOrEmpty(search))
+                {
+                    villaList=villaList.Where(u=>u.Name.ToLower().Contains(search));
+                }
+
+               Pagination pagination=new Pagination() { PageNumber = PageNumber, PageSize = pageSize };
+                Response.Headers.Add("X-Pagination", System.Text.Json.JsonSerializer.Serialize(pagination));
+
                 _response.Result = _mapper.Map<List<VillaDTO>>(villaList);
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);
@@ -55,10 +69,13 @@ namespace magicVilla_VillaAPI.Controllers.v1
 
         [Authorize(Roles = "admin")]
         [HttpGet("{id:int}", Name = "GetVilla")]
+        //no store is for the error message, coz we don't wanna cache them
+        [ResponseCache(Location =ResponseCacheLocation.None, NoStore =true)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+
         public async Task<ActionResult<APIResponse>> GetVilla(int id)
         {
             try

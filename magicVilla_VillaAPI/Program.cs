@@ -23,7 +23,23 @@ builder.Services.AddDbContext<ApplicationDbContext>(option => {
 });
 
 
+
+
+
+
+builder.Services.AddResponseCaching();
+
+
+
+//setting a general rule for caching and allow it cache for 30s
 builder.Services.AddControllers(option =>{
+    option.CacheProfiles.Add("Default30", new CacheProfile()
+    {
+
+        Duration = 30
+    });
+
+
 }).AddNewtonsoftJson().AddXmlDataContractSerializerFormatters();
 
 
@@ -155,10 +171,11 @@ builder.Services.AddSwaggerGen(options =>
 
 
 
-builder.Services.AddDbContext<ApplicationDbContext>(options => {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultSQLConnection"));
-    }); 
 var app = builder.Build();
+
+
+
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
