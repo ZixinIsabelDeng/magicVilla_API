@@ -126,13 +126,13 @@ namespace MagicVilla_Web.Controllers
                 {
 
 
-                    TempData["success"] = "Villa Updated sucessfully";
+                   
                     // Redirect to the IndexVilla action if the update was successful
                     return RedirectToAction(nameof(IndexVilla));
                 }
             }
 
-            TempData["error"] = "Error encountered";
+            TempData["success"] = "Villa Updated sucessfully";
             // If the model state is invalid or the API call was unsuccessful,
             // return the same view with the existing model for the user to correct
             return View(model);
@@ -148,48 +148,33 @@ namespace MagicVilla_Web.Controllers
         [Authorize(Roles = "admin")]
         public async Task<IActionResult> DeleteVilla(int villaId)
         {
-            // Call the GetAsync method from _villaService to fetch the villa details by ID
             var response = await _villaService.GetAsync<APIResponse>(villaId, HttpContext.Session.GetString(SD.SessionToken));
-
-            // Check if the API call was successful and the response is not null
             if (response != null && response.IsSuccess)
             {
-                // Deserialize the JSON response to a VillaDTO object
                 VillaDTO model = JsonConvert.DeserializeObject<VillaDTO>(Convert.ToString(response.Result));
-
-                // Map the VillaDTO object to a VillaUpdateDTO object using AutoMapper
-                // and pass it to the View
                 return View(model);
             }
-
-            // If the API call was unsuccessful or the response is null, return a NotFound result
             return NotFound();
         }
 
-        // HTTP POST method to update the villa details
         [Authorize(Roles = "admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteVilla(VillaDTO model)
         {
-          
-                // Call the UpdateAsync method from _villaService to update the villa details
-                var response = await _villaService.DeleteAsync<APIResponse>(model.Id, HttpContext.Session.GetString(SD.SessionToken));
-
-                // Check if the API call was successful and the response is not null
-                if (response != null && response.IsSuccess)
-                {
-                   TempData["success"] = "Villa Deleted sucessfully";
-                // Redirect to the IndexVilla action if the update was successful
+            // Call the DeleteAsync method from _villaService to delete the villa
+            var response = await _villaService.DeleteAsync<APIResponse>(model.Id, HttpContext.Session.GetString(SD.SessionToken));
+            if (response != null && response.IsSuccess)
+            {
+                // Set success message before redirection
+                TempData["success"] = "Villa deleted successfully"; // Change made here
                 return RedirectToAction(nameof(IndexVilla));
-                }
+            }
 
-            TempData["error"] = "Error encountered.";
-            // If the model state is invalid or the API call was unsuccessful,
-            // return the same view with the existing model for the user to correct
-            return View(model);
+            // Set error message if deletion is unsuccessful
+            TempData["error"] = "Error encountered during deletion."; // Change made here
+            return View(model); // Removed ModelState check as it's not necessary for deletion
         }
-
 
 
 

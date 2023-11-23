@@ -155,30 +155,28 @@ namespace magicVilla_VillaAPI.Controllers.v1
                     if (id == 0)
                     {
                         return BadRequest();
-
                     }
-                    var villaNumber = await _dbVillaNumber.GetAsync(u => u. VillaNo== id);
+
+                    var villaNumber = await _dbVillaNumber.GetAsync(u => u.VillaNo == id);
                     if (villaNumber == null)
                     {
                         return NotFound();
-
                     }
-                    _dbVillaNumber.RemoveAsync(villaNumber);
 
+                    await _dbVillaNumber.RemoveAsync(villaNumber); // Await the removal
 
-                    _response.StatusCode = HttpStatusCode.OK;
+                    _response.StatusCode = HttpStatusCode.NoContent; // Use NoContent for DELETE
                     _response.IsSuccess = true;
                     return Ok(_response);
                 }
                 catch (Exception exception)
                 {
+                    // Log the exception here (if you have a logging mechanism)
 
                     _response.IsSuccess = false;
-                    _response.ErrorMessage
-                        = new List<string>() { exception.ToString() };
+                    _response.ErrorMessage = new List<string>() { exception.ToString() }; // Ensure correct property name
+                    return StatusCode(500, _response); // Return a 500 Internal Server Error
                 }
-                return _response;
-
             }
 
             [HttpPut("{id:int}", Name = "UpdateVillaNumber")]

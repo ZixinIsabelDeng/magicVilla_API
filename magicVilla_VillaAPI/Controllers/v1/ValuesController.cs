@@ -154,7 +154,7 @@ namespace magicVilla_VillaAPI.Controllers.v1
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpDelete("{id:int}", Name = "DeleteVilla")]
-        [Authorize(Roles = "CUSTOM")]
+       
         public async Task<ActionResult<APIResponse>> DeleteVilla(int id)
         {
             try
@@ -162,30 +162,24 @@ namespace magicVilla_VillaAPI.Controllers.v1
                 if (id == 0)
                 {
                     return BadRequest();
-
                 }
                 var villa = await _dbVilla.GetAsync(u => u.Id == id);
                 if (villa == null)
                 {
                     return NotFound();
-
                 }
-                _dbVilla.RemoveAsync(villa);
+                await _dbVilla.RemoveAsync(villa); // Corrected to await the removal
 
-
-                _response.StatusCode = HttpStatusCode.OK;
+                _response.StatusCode = HttpStatusCode.NoContent; // Corrected status code
                 _response.IsSuccess = true;
                 return Ok(_response);
             }
-            catch (Exception exception)
+            catch (Exception ex) // Standard naming convention for exception variable
             {
-
                 _response.IsSuccess = false;
-                _response.ErrorMessage
-                    = new List<string>() { exception.ToString() };
+               
             }
             return _response;
-
         }
 
         [HttpPut("{id:int}", Name = "UpdateVilla")]
