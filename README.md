@@ -541,7 +541,6 @@ dotnet ef database update
 - Check `ServiceUrls:VillaAPI` in `MagicVilla_Web/appsettings.json`
 - Ensure both HTTP and HTTPS endpoints are configured
 
-
 ## 👤 Author
 
 **Zixin Isabel Deng**

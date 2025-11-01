@@ -21,12 +21,14 @@ FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 
-# Expose ports
+# Expose port (Railway will assign PORT dynamically)
 EXPOSE 8080
-EXPOSE 8081
 
-ENV ASPNETCORE_URLS=http://+:8080
 ENV ASPNETCORE_ENVIRONMENT=Production
+# Railway provides PORT env var dynamically, but we set a default
+# The app will use PORT if provided by Railway, otherwise 8080
+ENV PORT=8080
+ENV ASPNETCORE_URLS=http://+:8080
 
 ENTRYPOINT ["dotnet", "magicVilla_VillaAPI.dll"]
 
