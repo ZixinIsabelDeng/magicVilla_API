@@ -4,7 +4,6 @@
 [![ASP.NET Core](https://img.shields.io/badge/ASP.NET%20Core-7.0-512BD4?style=flat&logo=asp.net-core)](https://dotnet.microsoft.com/apps/aspnet)
 [![C#](https://img.shields.io/badge/C%23-12.0-239120?style=flat&logo=c-sharp)](https://docs.microsoft.com/en-us/dotnet/csharp/)
 [![SQL Server](https://img.shields.io/badge/SQL%20Server-2022-CC2927?style=flat&logo=microsoft-sql-server)](https://www.microsoft.com/sql-server)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 A full-stack vacation rental management system built with ASP.NET Core, featuring villa listings, booking management, and comprehensive admin capabilities. This project demonstrates modern web development practices including RESTful API design, JWT authentication, API versioning, caching, and pagination.
 
