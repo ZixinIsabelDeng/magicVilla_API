@@ -28,6 +28,7 @@ A full-stack vacation rental management system built with ASP.NET Core, featurin
 ## ✨ Features
 
 ### 🏠 Villa Management
+
 - **Browse Villas**: View available vacation rentals with detailed information
 - **Search & Filter**: Search villas by name, filter by occupancy
 - **Admin CRUD Operations**: Create, read, update, and delete villa listings
@@ -35,6 +36,7 @@ A full-stack vacation rental management system built with ASP.NET Core, featurin
 - **Pagination**: Efficient data loading with configurable page sizes
 
 ### 📅 Booking System
+
 - **Reservation Management**: Create and manage villa bookings
 - **Availability Checking**: Automatic availability validation
 - **Cost Calculation**: Automatic price calculation based on dates and occupancy
@@ -42,12 +44,14 @@ A full-stack vacation rental management system built with ASP.NET Core, featurin
 - **User Bookings**: View personal booking history
 
 ### 🔐 Authentication & Authorization
+
 - **JWT Authentication**: Secure token-based authentication for API
 - **Cookie Authentication**: Session management for web application
 - **Role-Based Access**: Admin and user role separation
 - **Protected Endpoints**: Secure API endpoints with authorization
 
 ### 🌐 API Features
+
 - **RESTful API**: Clean, REST-compliant API design
 - **API Versioning**: Support for multiple API versions (v1, v2)
 - **Response Caching**: Performance optimization with caching strategies
@@ -55,6 +59,7 @@ A full-stack vacation rental management system built with ASP.NET Core, featurin
 - **Pagination Support**: Efficient data retrieval for large datasets
 
 ### 🎨 Frontend Features
+
 - **Responsive Design**: Bootstrap-powered responsive UI
 - **Razor Views**: Server-side rendering with Razor View Engine
 - **AJAX Integration**: Dynamic content loading without page refresh
@@ -64,6 +69,7 @@ A full-stack vacation rental management system built with ASP.NET Core, featurin
 ## 🛠️ Tech Stack
 
 ### Backend
+
 - **ASP.NET Core 7.0** - Web framework
 - **C# 12** - Programming language
 - **Entity Framework Core 7.0** - ORM for database operations
@@ -73,6 +79,7 @@ A full-stack vacation rental management system built with ASP.NET Core, featurin
 - **Swagger/OpenAPI** - API documentation
 
 ### Frontend
+
 - **ASP.NET Core MVC** - MVC framework
 - **Razor View Engine** - Server-side templating
 - **Bootstrap 5** - CSS framework for responsive design
@@ -80,6 +87,7 @@ A full-stack vacation rental management system built with ASP.NET Core, featurin
 - **AJAX** - Asynchronous HTTP requests
 
 ### Tools & Libraries
+
 - **Docker** - Containerization for SQL Server (macOS)
 - **Git** - Version control
 - **Swagger UI** - Interactive API testing
@@ -117,6 +125,7 @@ A full-stack vacation rental management system built with ASP.NET Core, featurin
 ```
 
 ### Architecture Patterns
+
 - **Repository Pattern**: Abstraction layer for data access
 - **Dependency Injection**: Loose coupling and testability
 - **DTO Pattern**: Data transfer objects for API communication
@@ -128,7 +137,7 @@ Before you begin, ensure you have the following installed:
 
 - **.NET SDK 7.0 or later** - [Download here](https://dotnet.microsoft.com/download/dotnet/7.0)
 - **SQL Server 2022** or **SQL Server Express** - [Download here](https://www.microsoft.com/sql-server/sql-server-downloads)
-  - *Alternative for macOS*: Use SQL Server in Docker (see setup instructions below)
+  - _Alternative for macOS_: Use SQL Server in Docker (see setup instructions below)
 - **Docker Desktop** (optional, for macOS users) - [Download here](https://www.docker.com/products/docker-desktop)
 - **Visual Studio 2022** or **Visual Studio Code** with C# extension
 - **Git** - For cloning the repository
@@ -157,11 +166,13 @@ Update the connection string in `magicVilla_VillaAPI/appsettings.json`:
 #### Option B: macOS/Linux (Docker)
 
 1. Start SQL Server in Docker:
+
    ```bash
    ./setup-sqlserver-docker.sh
    ```
 
    Or manually:
+
    ```bash
    docker run -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=YourStrong@Passw0rd" \
       -p 1433:1433 --name magicvilla-sqlserver \
@@ -180,6 +191,7 @@ dotnet ef database update
 ```
 
 This will:
+
 - Create the `Magic_VillaAPI` database
 - Create all necessary tables (Villas, VillaNumbers, Bookings, Users)
 - Seed initial data with sample villas
@@ -205,6 +217,7 @@ Use the provided startup script:
 ```
 
 This script will:
+
 - Start SQL Server (if using Docker)
 - Run database migrations
 - Start the API server
@@ -215,12 +228,14 @@ This script will:
 #### Step 1: Start the API (Backend)
 
 **Terminal 1:**
+
 ```bash
 cd magicVilla_VillaAPI
 dotnet run
 ```
 
 The API will be available at:
+
 - **HTTPS**: `https://localhost:7001`
 - **HTTP**: `http://localhost:5065`
 - **Swagger UI**: `https://localhost:7001/swagger`
@@ -228,12 +243,14 @@ The API will be available at:
 #### Step 2: Start the Web Application (Frontend)
 
 **Terminal 2:**
+
 ```bash
 cd MagicVilla_Web
 dotnet run
 ```
 
 The web application will be available at:
+
 - **HTTPS**: `https://localhost:7002`
 - **HTTP**: `http://localhost:5136`
 
@@ -254,6 +271,7 @@ Update this URL if your API runs on a different port.
 ### Accessing Swagger UI
 
 Once the API is running, navigate to:
+
 ```
 https://localhost:7001/swagger
 ```
@@ -261,6 +279,7 @@ https://localhost:7001/swagger
 ### API Endpoints
 
 #### Villa API (`/api/v1/VillaAPI`)
+
 - `GET /api/v1/VillaAPI` - Get all villas (with pagination, filtering, search)
 - `GET /api/v1/VillaAPI/{id}` - Get villa by ID
 - `POST /api/v1/VillaAPI` - Create new villa (Admin only)
@@ -269,6 +288,7 @@ https://localhost:7001/swagger
 - `DELETE /api/v1/VillaAPI/{id}` - Delete villa (Admin only)
 
 #### Villa Number API (`/api/v1/VillaNumberAPI`)
+
 - `GET /api/v1/VillaNumberAPI` - Get all villa numbers
 - `GET /api/v1/VillaNumberAPI/{id}` - Get villa number by ID
 - `POST /api/v1/VillaNumberAPI` - Create new villa number
@@ -276,6 +296,7 @@ https://localhost:7001/swagger
 - `DELETE /api/v1/VillaNumberAPI/{id}` - Delete villa number
 
 #### Booking API (`/api/v1/BookingAPI`)
+
 - `GET /api/v1/BookingAPI` - Get all bookings (with optional user filter)
 - `GET /api/v1/BookingAPI/{id}` - Get booking by ID
 - `POST /api/v1/BookingAPI` - Create new booking
@@ -283,12 +304,14 @@ https://localhost:7001/swagger
 - `DELETE /api/v1/BookingAPI/{id}` - Delete booking
 
 #### Authentication (`/api/Users`)
+
 - `POST /api/Users/login` - User login
 - `POST /api/Users/register` - User registration
 
 ### API Versioning
 
 The API supports versioning:
+
 - **v1**: Current stable version (`/api/v1/...`)
 - **v2**: Future version (`/api/v2/...`)
 
@@ -360,29 +383,38 @@ magicVilla_API/
 ## 🔑 Key Features Details
 
 ### Pagination
+
 Villa listings support pagination with configurable page size:
+
 ```
 GET /api/v1/VillaAPI?PageNumber=1&pageSize=5
 ```
 
 ### Response Caching
+
 API responses are cached for 30 seconds (configurable) to improve performance:
+
 ```csharp
 [ResponseCache(CacheProfileName = "Default30")]
 ```
 
 ### Search & Filtering
+
 - **Search**: Filter villas by name using the `search` query parameter
 - **Filter**: Filter by occupancy using `filterOccupancy` query parameter
 
 ### Automatic Cost Calculation
+
 Bookings automatically calculate total cost based on:
+
 - Villa price per night
 - Number of nights
 - Number of guests
 
 ### Availability Validation
+
 The booking system checks for:
+
 - Date conflicts with existing bookings
 - Minimum stay requirements
 - Maximum occupancy limits
@@ -394,6 +426,7 @@ The booking system checks for:
 After running migrations, you can register a new user or use seed data. The application uses JWT tokens for API authentication.
 
 ### Registration Flow
+
 1. Navigate to `/Auth/Register`
 2. Create an account
 3. Login at `/Auth/Login`
@@ -402,6 +435,7 @@ After running migrations, you can register a new user or use seed data. The appl
 ### JWT Token Usage
 
 Once authenticated, the web application stores the JWT token in a cookie. For API testing:
+
 1. Login via `/api/Users/login`
 2. Copy the token from the response
 3. Use it in Swagger UI: Click "Authorize" → Enter `Bearer <token>`
@@ -411,12 +445,15 @@ Once authenticated, the web application stores the JWT token in a cookie. For AP
 This project can be deployed to various cloud platforms. See the deployment guides for detailed instructions:
 
 ### Quick Deployment (15 minutes)
+
 👉 **[DEPLOYMENT_QUICK_START.md](./DEPLOYMENT_QUICK_START.md)** - Fastest way to deploy
 
 ### Full Deployment Guide
+
 👉 **[DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md)** - Comprehensive guide for all platforms
 
 ### Supported Platforms
+
 - 🚂 **Railway** (Recommended - Free tier, easiest setup)
 - 🎨 **Render** (Free tier available)
 - ☁️ **Azure App Service** (Microsoft platform)
@@ -435,21 +472,24 @@ See `docker-compose.yml` for configuration details.
 
 ## 📸 Screenshots
 
-*Add screenshots of your application here*
+_Add screenshots of your application here_
 
 ### Villa Listing Page
+
 - Browse available villas with images and details
 
 ### Booking Interface
+
 - User-friendly booking form with date selection
 - Automatic price calculation
 - Booking confirmation page
 
 ### Admin Dashboard
+
 - Manage villas, villa numbers, and bookings
 - User management interface
 
-*Note: Screenshots can be added to showcase the UI/UX*
+_Note: Screenshots can be added to showcase the UI/UX_
 
 ## 🤝 Contributing
 
@@ -462,6 +502,7 @@ Contributions are welcome! If you'd like to contribute:
 5. Open a Pull Request
 
 ### Development Guidelines
+
 - Follow C# coding conventions
 - Write meaningful commit messages
 - Add comments for complex logic
@@ -470,22 +511,29 @@ Contributions are welcome! If you'd like to contribute:
 ## 🐛 Troubleshooting
 
 ### Database Connection Issues
+
 - **Windows**: Ensure SQL Server is running and instance name matches connection string
 - **macOS/Docker**: Verify Docker container is running: `docker ps | grep magicvilla-sqlserver`
 - Check firewall settings if using remote database
 
 ### Port Conflicts
+
 If ports 7001, 7002, 5065, or 5136 are in use:
+
 - Update ports in `launchSettings.json` files
 - Update `ServiceUrls` in `MagicVilla_Web/appsettings.json`
 
 ### SSL Certificate Warnings
+
 In development, you may see SSL certificate warnings. This is normal:
+
 - Click "Advanced" → "Proceed to localhost" (Chrome)
 - Or "Advanced" → "Accept the Risk" (Firefox)
 
 ### Migration Errors
+
 If migrations fail:
+
 ```bash
 # Remove existing database and recreate
 dotnet ef database drop
@@ -493,6 +541,7 @@ dotnet ef database update
 ```
 
 ### API Connection Issues
+
 - Verify API is running and accessible
 - Check `ServiceUrls:VillaAPI` in `MagicVilla_Web/appsettings.json`
 - Ensure both HTTP and HTTPS endpoints are configured
