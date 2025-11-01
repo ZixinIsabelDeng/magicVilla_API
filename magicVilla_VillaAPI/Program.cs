@@ -49,6 +49,7 @@ builder.Services.AddControllers(option =>{
 builder.Services.AddScoped<IVillaRepository,VillaRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IVillaNumberRepository,VillaNumberRepository>();
+builder.Services.AddScoped<IBookingRepository, BookingRepository>();
 builder.Services.AddAutoMapper(typeof(MappingConfig));
 builder.Services.AddApiVersioning(options => {
     options.AssumeDefaultVersionWhenUnspecified = true;

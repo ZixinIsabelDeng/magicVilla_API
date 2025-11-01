@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: magicvilla-api
+    env: dotnet
+    buildCommand: cd magicVilla_VillaAPI && dotnet publish -c Release -o publish
+    startCommand: cd magicVilla_VillaAPI && dotnet publish/magicVilla_VillaAPI.dll
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: ASPNETCORE_URLS
+        value: http://+:10000
+    healthCheckPath: /swagger
+
+  - type: web
+    name: magicvilla-web
+    env: dotnet
+    buildCommand: cd MagicVilla_Web && dotnet publish -c Release -o publish
+    startCommand: cd MagicVilla_Web && dotnet publish/MagicVilla_Web.dll
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: ServiceUrls__VillaAPI
+        fromService:
+          name: magicvilla-api
+          type: web
+          property: host
+

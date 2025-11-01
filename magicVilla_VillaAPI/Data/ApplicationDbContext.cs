@@ -12,7 +12,8 @@ namespace magicVilla_VillaAPI.Data
         }
         public DbSet<LocalUser> LocalUsers { get; set; }
         public DbSet<Villa> Villas { get; set; }
-        public DbSet<VillaNumber> VillaNumber { get; set; }  
+        public DbSet<VillaNumber> VillaNumber { get; set; }
+        public DbSet<Booking> Bookings { get; set; }  
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Villa>().HasData(
@@ -47,7 +48,7 @@ namespace magicVilla_VillaAPI.Data
                       Id = 3,
                       Name = "Forest Villa",
                       Details = " Grand forest manor, vibrant orchards, lavish suites, crystal chandeliers, sweeping landscapes, concealed grottos, magnificent atrium, tranquil waterfall, noble frescoes, magical charm.",
-                    ImageUrl = "https://static.ojohosts.ca/p/1001/C7020098_0_mbNfqV_p.jpeg",
+                    ImageUrl = "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800",
                       Occupancy = 2,
                       Rate = 9990,
                       Sqft = 709,

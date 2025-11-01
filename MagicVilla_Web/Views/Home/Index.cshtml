@@ -31,7 +31,7 @@
                         <!-- Nested row for booking and villa info with padding -->
                         <div class="col-4">
                             <!-- Booking button -->
-                            <a href="" class="btn btn-success form-control btn-block">Book</a>
+                            <a href="@Url.Action("Index", "Booking", new { villaId = villa.Id })" class="btn btn-success form-control btn-block">Book</a>
                         </div>
                         <div class="col-4">
                             <!-- Display max occupancy and villa size -->

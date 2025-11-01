@@ -1,0 +1,72 @@
+@model magicVilla_Web.Models.Dto.BookingDTO
+@{
+    ViewData["Title"] = "Booking Confirmation";
+    var nights = (Model.CheckOutDate - Model.CheckInDate).Days;
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-success text-white text-center">
+                    <h3 class="mb-0">✓ Booking Confirmed!</h3>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-success">
+                        <h5>Thank you for your booking, @Model.UserName!</h5>
+                        <p class="mb-0">Your booking has been confirmed. We've sent a confirmation email to @Model.Email</p>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <h5>Booking Details</h5>
+                            <hr>
+                            <p><strong>Booking ID:</strong> #@Model.Id</p>
+                            <p><strong>Villa:</strong> @Model.VillaName</p>
+                            <p><strong>Status:</strong> <span class="badge bg-info">@Model.Status</span></p>
+                            <p><strong>Booking Date:</strong> @Model.CreatedDate.ToString("MMMM dd, yyyy")</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Stay Details</h5>
+                            <hr>
+                            <p><strong>Check-in:</strong> @Model.CheckInDate.ToString("MMMM dd, yyyy")</p>
+                            <p><strong>Check-out:</strong> @Model.CheckOutDate.ToString("MMMM dd, yyyy")</p>
+                            <p><strong>Nights:</strong> @nights night(s)</p>
+                            <p><strong>Guests:</strong> @Model.NumberOfGuests</p>
+                        </div>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <h5>Guest Information</h5>
+                            <hr>
+                            <p><strong>Name:</strong> @Model.UserName</p>
+                            <p><strong>Email:</strong> @Model.Email</p>
+                            <p><strong>Phone:</strong> @Model.PhoneNumber</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Payment Summary</h5>
+                            <hr>
+                            <p><strong>Total Cost:</strong> <span class="text-success fw-bold" style="font-size: 1.5em;">$@Model.TotalCost.ToString("N2")</span></p>
+                        </div>
+                    </div>
+
+                    @if (!string.IsNullOrEmpty(Model.SpecialRequests))
+                    {
+                        <div class="mb-4">
+                            <h5>Special Requests</h5>
+                            <hr>
+                            <p>@Model.SpecialRequests</p>
+                        </div>
+                    }
+
+                    <div class="d-grid gap-2">
+                        <a href="@Url.Action("Index", "Home")" class="btn btn-primary">Back to Home</a>
+                        <a href="@Url.Action("MyBookings", "Booking")" class="btn btn-outline-secondary">View My Bookings</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

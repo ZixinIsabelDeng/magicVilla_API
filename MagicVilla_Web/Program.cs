@@ -21,6 +21,9 @@ builder.Services.AddScoped<IVillaService, VillaService>();
 builder.Services.AddHttpClient<IVillaNumberService, VillaNumberService>();
 builder.Services.AddScoped<IVillaNumberService, VillaNumberService>();
 
+builder.Services.AddHttpClient<IBookingService, BookingService>();
+builder.Services.AddScoped<IBookingService, BookingService>();
+
 // Singleton service for accessing the HTTP context, useful for getting request/response information.
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 

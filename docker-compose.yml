@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: magicvilla-sqlserver
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=YourStrong@Passw0rd123!
+      - MSSQL_PID=Developer
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserver_data:/var/opt/mssql
+    healthcheck:
+      test: /opt/mssql-tools18/bin/sqlcmd -S localhost -U SA -P "YourStrong@Passw0rd123!" -Q "SELECT 1" || exit 1
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: magicvilla-api
+    ports:
+      - "8080:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=Magic_VillaAPI;User Id=SA;Password=YourStrong@Passw0rd123!;TrustServerCertificate=true;
+      - ApiSetting__Secret=THIS_IS_USED_TO_SIGN_AND_VERIFY_JWT_TOKENS_REPLACE_IT_WITH_YOUR_OWN_SECRET
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+    restart: unless-stopped
+
+  web:
+    build:
+      context: .
+      dockerfile: MagicVilla_Web/Dockerfile
+    container_name: magicvilla-web
+    ports:
+      - "8081:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ServiceUrls__VillaAPI=http://api:8080
+    depends_on:
+      - api
+    restart: unless-stopped
+
+volumes:
+  sqlserver_data:
+

@@ -1,0 +1,126 @@
+@model magicVilla_Web.Models.Dto.BookingCreateDTO
+@{
+    var villa = ViewBag.Villa as magicVilla_Web.Models.Dto.VillaDTO;
+    ViewData["Title"] = "Book Villa";
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">Book @(villa?.Name ?? "Villa")</h3>
+                </div>
+                <div class="card-body">
+                    @if (villa != null)
+                    {
+                        <div class="mb-4">
+                            <img src="@villa.ImageUrl" alt="@villa.Name" class="img-fluid rounded mb-3" style="max-height: 300px; width: 100%; object-fit: cover;">
+                            <h5>@villa.Name</h5>
+                            <p class="text-muted">@villa.Details</p>
+                            <p><strong>Rate:</strong> $@villa.Rate.ToString("N2") per night</p>
+                            <p><strong>Max Occupancy:</strong> @villa.Occupancy adults</p>
+                            <p><strong>Size:</strong> @villa.Sqft sqft</p>
+                        </div>
+                        <hr>
+                    }
+
+                    @if (TempData["error"] != null)
+                    {
+                        <div class="alert alert-danger">
+                            @TempData["error"]
+                        </div>
+                    }
+
+                    <form asp-action="Index" method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        
+                        <input type="hidden" asp-for="VillaId" />
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="UserName" class="form-label">Full Name *</label>
+                                <input asp-for="UserName" class="form-control" placeholder="Enter your full name" required />
+                                <span asp-validation-for="UserName" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Email" class="form-label">Email *</label>
+                                <input asp-for="Email" type="email" class="form-control" placeholder="your.email@example.com" required />
+                                <span asp-validation-for="Email" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="PhoneNumber" class="form-label">Phone Number *</label>
+                            <input asp-for="PhoneNumber" type="tel" class="form-control" placeholder="+1 (555) 123-4567" required />
+                            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="CheckInDate" class="form-label">Check-in Date *</label>
+                                <input asp-for="CheckInDate" type="date" class="form-control" min="@DateTime.Today.ToString("yyyy-MM-dd")" required />
+                                <span asp-validation-for="CheckInDate" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="CheckOutDate" class="form-label">Check-out Date *</label>
+                                <input asp-for="CheckOutDate" type="date" class="form-control" min="@DateTime.Today.AddDays(1).ToString("yyyy-MM-dd")" required />
+                                <span asp-validation-for="CheckOutDate" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="NumberOfGuests" class="form-label">Number of Guests *</label>
+                            <input asp-for="NumberOfGuests" type="number" class="form-control" min="1" max="@(villa?.Occupancy ?? 20)" value="1" required />
+                            <small class="text-muted">Maximum: @(villa?.Occupancy ?? 20) guests</small>
+                            <span asp-validation-for="NumberOfGuests" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="SpecialRequests" class="form-label">Special Requests</label>
+                            <textarea asp-for="SpecialRequests" class="form-control" rows="3" placeholder="Any special requests or notes..."></textarea>
+                            <span asp-validation-for="SpecialRequests" class="text-danger"></span>
+                        </div>
+
+                        @if (ViewData.ModelState["CustomError"] != null && ViewData.ModelState["CustomError"].Errors.Count > 0)
+                        {
+                            <div class="alert alert-danger">
+                                @foreach (var error in ViewData.ModelState["CustomError"].Errors)
+                                {
+                                    <p class="mb-0">@error.ErrorMessage</p>
+                                }
+                            </div>
+                        }
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">Confirm Booking</button>
+                            <a href="@Url.Action("Index", "Home")" class="btn btn-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <script>
+        // Auto-update check-out minimum date when check-in changes
+        document.getElementById('CheckInDate').addEventListener('change', function() {
+            var checkInDate = new Date(this.value);
+            checkInDate.setDate(checkInDate.getDate() + 1);
+            var checkOutInput = document.getElementById('CheckOutDate');
+            checkOutInput.min = checkInDate.toISOString().split('T')[0];
+            
+            // If current check-out is before new minimum, update it
+            if (checkOutInput.value && new Date(checkOutInput.value) < checkInDate) {
+                checkOutInput.value = checkInDate.toISOString().split('T')[0];
+            }
+        });
+    </script>
+}
+
