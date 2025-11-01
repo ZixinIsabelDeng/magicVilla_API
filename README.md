@@ -496,9 +496,6 @@ dotnet ef database update
 - Check `ServiceUrls:VillaAPI` in `MagicVilla_Web/appsettings.json`
 - Ensure both HTTP and HTTPS endpoints are configured
 
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## 👤 Author
 
