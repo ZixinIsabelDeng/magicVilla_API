@@ -38,8 +38,37 @@ if [ -f ".railway/link.json" ]; then
     echo "✅ Project already linked"
     railway status
 else
-    echo "   Select your project from the list, or create a new one:"
-    railway link
+    echo "   Creating new Railway project..."
+    echo ""
+    echo "   Option 1: Create project from GitHub repo (recommended)"
+    echo "   - Go to https://railway.app/dashboard"
+    echo "   - Click 'New Project' → 'Deploy from GitHub repo'"
+    echo "   - Select 'magicVilla_API' repository"
+    echo "   - Then come back and run: railway link"
+    echo ""
+    echo "   Option 2: Try linking now (if project exists)"
+    echo ""
+    read -p "   Create project on Railway dashboard first? (y/n): " create_first
+    
+    if [ "$create_first" = "y" ] || [ "$create_first" = "Y" ]; then
+        echo ""
+        echo "   Opening Railway dashboard..."
+        railway open || echo "   Visit: https://railway.app/dashboard"
+        echo ""
+        echo "   After creating the project, press Enter to continue..."
+        read -p "   "
+    fi
+    
+    echo ""
+    echo "   Linking to Railway project..."
+    railway link --project || {
+        echo ""
+        echo "   ⚠️  Could not link automatically. Please run manually:"
+        echo "   railway link"
+        echo ""
+        echo "   Or create project via web: https://railway.app/dashboard"
+        exit 1
+    }
     echo ""
 fi
 
