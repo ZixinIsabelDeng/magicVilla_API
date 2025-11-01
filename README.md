@@ -445,11 +445,7 @@ This project can be deployed to various cloud platforms. See the deployment guid
 
 ### Quick Deployment (15 minutes)
 
-👉 **[DEPLOYMENT_QUICK_START.md](./DEPLOYMENT_QUICK_START.md)** - Fastest way to deploy
-
-### Full Deployment Guide
-
-👉 **[DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md)** - Comprehensive guide for all platforms
+👉 **[HOW_TO_DEPLOY.md](./HOW_TO_DEPLOY.md)** - Step-by-step deployment guide (Railway recommended)
 
 ### Supported Platforms
 
